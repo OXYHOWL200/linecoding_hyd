@@ -645,9 +645,8 @@ function computePSD(signal) {
     return { freq: [], psd: [] };
   }
 
-  // Remove DC component
-  const mean = signal.reduce((a, b) => a + b, 0) / N;
-  const x = signal.map(v => v - mean);
+  // Use raw signal (do not remove DC here - windowing will be applied in FFT)
+  const x = signal.slice();
 
   const halfN = Math.floor(N / 2);
   const freq = [];
@@ -1221,8 +1220,13 @@ function smoothFFT(signal) {
     // ---- Zero-padding (critical for smoothing) ----
     let P = 4096;   // or 8192 for even smoother plot
 
-    let padded = new Array(P).fill(0);
-    for (let i = 0; i < N; i++) padded[i] = signal[i];
+  const fs = 1; // sample rate (samples per unit time). kept 1 for normalized frequency
+  let padded = new Array(P).fill(0);
+  // apply Hann window (w[n] = 0.5*(1 - cos(2πn/(N-1)))) to reduce spectral leakage
+  for (let n = 0; n < N; n++) {
+    const w = 0.5 * (1 - Math.cos(2 * Math.PI * n / (N - 1)));
+    padded[n] = signal[n] * w;
+  }
 
     let re = new Array(P).fill(0);
     let im = new Array(P).fill(0);
@@ -1236,14 +1240,15 @@ function smoothFFT(signal) {
         }
     }
 
-    // ---- Only positive spectrum ----
+    // ---- Only positive spectrum and correct frequency axis + PSD scaling ----
     let psd = [];
     let freq = [];
 
-    for (let k = 0; k < P/2; k++) {
-        let mag = (re[k]*re[k] + im[k]*im[k]) / P;
-        psd.push(mag);
-        freq.push(k);
+    for (let k = 0; k < P / 2; k++) {
+      // PSD scaling: (|X(k)|^2) / (fs * P)
+      let mag = (re[k] * re[k] + im[k] * im[k]) / (fs * P);
+      psd.push(mag);
+      freq.push(k * fs / P);
     }
 
     return { freq, psd };
