@@ -10,6 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  touch-action: manipulation;
 }
 
 .header {
@@ -158,6 +159,7 @@ body {
   border-radius: 5px;
   background: #f9f9f9;
   overflow: hidden;
+  touch-action: none;
 }
 
 .diagram-block {
@@ -171,6 +173,7 @@ body {
   user-select: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s;
+  touch-action: none;
 }
 
 .diagram-block:hover {
@@ -191,6 +194,7 @@ body {
   cursor: crosshair;
   border: 2px solid white;
   z-index: 10;
+  touch-action: none;
 }
 
 .connection-point.input {
@@ -932,6 +936,121 @@ p, li, label {
   box-shadow: 0 0 20px rgba(0,255,247,0.4);
 }
 
+/* =======================
+   MOBILE RESPONSIVENESS
+======================= */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 15px;
+    flex-wrap: wrap;
+  }
+  
+  .header h1 {
+    font-size: 18px;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .nav-bar a {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .container {
+    padding: 10px;
+    margin: 10px auto;
+  }
+  
+  .diagram-container {
+    height: 300px;
+  }
+  
+  .diagram-block {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+  
+  .channel-selector {
+    flex-direction: column;
+  }
+  
+  .channel-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    width: 100%;
+  }
+  
+  .input-section {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .input-section input {
+    width: 100%;
+  }
+  
+  .controls-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer {
+    padding: 20px 10px;
+  }
+  
+  .contributors-list {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .scope-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 16px;
+  }
+  
+  .nav-bar {
+    flex-wrap: wrap;
+  }
+  
+  .nav-bar a {
+    padding: 8px 10px;
+    font-size: 11px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .diagram-container {
+    height: 250px;
+  }
+  
+  .dial-svg {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .content-section {
+    padding: 20px;
+  }
+  
+  .quiz-container {
+    padding: 20px;
+  }
+  
+  .question-block p {
+    font-size: 15px;
+  }
+  
+  .option {
+    font-size: 14px;
+  }
+}
 .results-box span {
   color: var(--neon-pink);
   text-shadow: 0 0 10px var(--neon-pink);
